@@ -1,0 +1,15 @@
+.enter {
+    max-width: 430px;
+    background-color: #000;
+    color: #fff;    
+    display: block;    
+    box-sizing: border-box;    
+    position: relative;
+}
+  
+  @media screen and (min-width: 430px) {
+    .enter {
+      max-width: 358px;
+      margin: 0 auto;      
+    }
+  }

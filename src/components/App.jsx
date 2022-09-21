@@ -1,9 +1,11 @@
 import React from "react";
 import api from "../utils/Api.js";
+import {Switch, Route, useHistory } from 'react-router-dom';
 import "../index.css";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
+import Login from './Login';
 import EditProfilePopup from "./EditProfilePopup";
 import AddPlacePopup from "./AddPlacePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
@@ -27,6 +29,7 @@ function App() {
     link: "",
     alt: "",
   });
+  const [email, setEmail] = React.useState('');
 
   React.useEffect(() => {
     Promise.all([api.getUserInfo(), api.getInitialCards()])
@@ -113,9 +116,18 @@ function App() {
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
+       <Header email={email} onSignOut={handleSignOut}/>
+       <Switch>
+       <ProtectedRoute exact path="/">
       <div className="page">
         <div className="page__center">
-          <Header />
+        <Route path="/sign-up ">
+        <Login />
+      </Route>
+      <Route path="/sign-in ">
+        <Register />
+      </Route>      
+
           <Main
             cards={cards}
             onEditProfile={handleEditProfileClick}
@@ -144,6 +156,8 @@ function App() {
           <ImagePopup card={selectedCard} onClose={closeAllPopups} />
         </div>
       </div>
+      </ProtectedRoute>
+      </Switch>
     </CurrentUserContext.Provider>
   );
 }
