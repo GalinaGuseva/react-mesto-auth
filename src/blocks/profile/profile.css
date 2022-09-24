@@ -1,5 +1,6 @@
 .profile {
-  max-width: 100%;
+  max-width: 880px;
+  margin: 0 auto;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -11,6 +12,7 @@
     flex-direction: column;
     justify-content: center;
     padding-bottom: 36px;
+    max-width: 282px;
   }
 } 
 

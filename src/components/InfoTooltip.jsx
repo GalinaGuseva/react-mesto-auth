@@ -1,22 +1,28 @@
 import React from "react";
-import PopupWithForm from './PopupWithForm';
 import registerSuccess from '../images/yes.svg'
 import registerFail from '../images/fail.svg'
 
-export default function InfoTooltip({isOpen, onClose, success}) {
+export default function InfoTooltip({isOpen, onClose, isSuccess}) {
 
   return (
-    <PopupWithForm isOpen={isOpen} onClose={onClose}>
-        {success ? 
-          <div className="popup__register">
-            <img src={registerSuccess} alt="Регистрация: успех"/>
-            <h1 className="popup__title">Вы успешно зарегистрировались</h1>
-          </div> :
-          <div className="popup__register">
-             <img src={registerFail} alt="Регистрация: ошибка"/>
-             <h1 className="popup__title">Что-то пошло не так! Попробуйте ещё раз.</h1>
-          </div>
-        }
-    </PopupWithForm>
+    <div className={`popup ${isOpen && 'popup_opened'}`}>        
+        <figure className="popup__container">
+          <button
+          type="button"
+          className="popup__btn-close"
+          title="Закрыть"
+          onClick={onClose}
+        ></button>
+        {isSuccess ? 
+        <div>
+          <img src={registerSuccess} alt="Регистрация: успех" className="popup__image"/>
+            <figcaption className="popup__title popup__title_info">Вы успешно зарегистрировались</figcaption>
+             </div>
+          :   <div>
+             <img src={registerFail} alt="Регистрация: ошибка" className="popup__image"/>
+             <figcaption className="popup__title popup__title_info">Что-то пошло не так! Попробуйте ещё раз.</figcaption>        
+             </div>}
+        </figure>
+    </div>
   )
 } 

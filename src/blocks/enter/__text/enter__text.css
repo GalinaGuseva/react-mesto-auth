@@ -1,11 +1,11 @@
 .enter__subtitle {
-    font-family: Inter;
+  font-family: "Inter";
   font-style: normal;
   font-weight: normal;
   font-size: 14px;
   line-height: 17px;
   text-align: center;
-  margin-top: 20px;
+  margin: 15px 0 0 0;
   text-decoration: none;
-  color: white;
+  color: white; 
 }
