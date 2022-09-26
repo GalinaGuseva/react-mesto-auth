@@ -1,15 +1,15 @@
-import React from '.react';
+import React from 'react';
 import EnterForm from './EnterForm';
 
-export default function Login(onSubmit) {
+export default function Login(onEnterSubmit) {
 
     return (
         <div className="page">
             <EnterForm
                 name="login"
-                onSubmit={onSubmit}
-                title="Войти"
-                buttonTitle="Войти"
+                onEnterSubmit={onEnterSubmit}
+                title="Вход"
+                buttonTitle="Войти"               
             />
         </div>
     )

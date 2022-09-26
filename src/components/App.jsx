@@ -34,9 +34,9 @@ function App() {
     alt: '',
   });
   const [isInfoPopupOpen, setIsInfoPopupOpen] = React.useState(false);  
-  const [isLoggedIn, setLoggedIn] = useState(false); 
-  const [userEmail, setUserEmail] = useState('');
-
+  const [isLoggedIn, setLoggedIn] = React.useState(false); 
+  const [userEmail, setUserEmail] = React.useState('');
+  const [isInfoTooltipSuccess, setIsInfoTooltipSuccess] = React.useState(false);
   const history = useHistory();
 
   const getData = () => {
@@ -50,50 +50,48 @@ function App() {
 
   // Проверка токена и авторизация пользователя
   React.useEffect(() => {
+    const tockenCheck = () => {
+      if(!localStorage.getItem('jwt')) return;
     const jwt = localStorage.getItem('jwt');
-    if (jwt) {
-      auth.checkToken(jwt)
-        .then(res => {
-          if (res.data.email) {                     
-            setUserEmail(res.data.email);
-            setLoggedIn(true);
-            history.push('/');
-            getData();  
-          }
-        })
-        .catch(err => { console.log(err); })
-    }
+    auth.getContent(jwt).then((res) => {
+      if(res) {
+        setLoggedIn(true);
+        history.push('/');
+        setUserEmail(res.data.email);
+        getData();
+      }
+    })
+  }
+    tockenCheck();    
   }, []);
 
  // Вход в аккаунт
-function handleLogin({email, password}) {
-    auth.login({email, password})
-      .then((res) => {
-        if (res.token) {  
-          setUserEmail(email);
-          setLoggedIn(true);
-          localStorage.setItem('jwt', data.token);
-          history.push('/');              
-          getData();
-        }
+const handleLogin = ({email, password}) => {
+   return auth.login({email, password})
+      .then((data) => {
+        if(!data.jwt) return;
+        localStorage.setItem('jwt', data.jwt);
+        setLoggedIn(true);
+        getData();
+        setUserEmail(email);        
       })
        .catch((err) => {
           console.log(err); 
-          setLoggedIn(false);            
-          setIsInfoPopupOpen(true);
-    })
+          setLoggedIn(false); 
+      })
 }
 
 function handleRegister({email, password}) {
-    auth.register({email, password})
+    return auth.register({email, password})
         .then(() => {
           history.push('/signin');
-          setIsInfoPopupOpen(true);
+          setIsInfoTooltipSuccess(true);          
         })
-        .catch(() => {
+        .catch((err) => {
           console.log(err); 
-          setIsInfoPopupOpen(true);
+          setIsInfoTooltipSuccess(false);          
         })
+        .finally(() => setIsInfoPopupOpen(true)); 
 }
 
 function handleSignOut() {
@@ -102,7 +100,7 @@ function handleSignOut() {
            setLoggedIn(false);
            setUserEmail('');
            localStorage.removeItem('jwt');
-           history.push('/sign-in');
+           history.push('/signin');
       })
       .catch((err) => console.log(err));
 }  
@@ -189,25 +187,26 @@ function closeAllPopups() {
           isLoggedIn={isLoggedIn}
           userEmail={userEmail} />
        <Switch>
-       <ProtectedRoute exact path="/" isLoggedIn={isLoggedIn}  
-            component={Main} 
+       <Route path="/signin">
+            {isLoggedIn ? <Redirect to="/"/> : <Login onEnterSubmit={handleLogin}/>}         
+        </Route>            
+        <Route path="/signup"> 
+           {isLoggedIn ? <Redirect to="/"/> : <Register onEnterSubmit={handleRegister}/>}          
+        </Route>          
+        <Route>
+            {isLoggedIn ? <Redirect to="/" /> : <Redirect to="/signin" />}
+        </Route> 
+       <ProtectedRoute exact path="/" isLoggedIn={isLoggedIn}>  
+            <Main
             cards={cards}
             onEditProfile={handleEditProfileClick}
             onAddPlace={handleAddPlaceClick}
             onEditAvatar={handleEditAvatarClick}
             onCardClick={handleCardClick}
             onCardLike={handleCardLike}
-            onCardDelete={handleCardDelete}/>            
-        <Route path="/sign-up"> 
-           {isLoggedIn ? <Redirect to="/"/> : <Register onSubmit={handleRegister}/>}          
-        </Route>
-        <Route path="/sign-in">
-        {isLoggedIn ? <Redirect to="/"/> : <Login onSubmit={handleLogin}/>}         
-        </Route>      
-        <Route>
-            {isLoggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}
-        </Route>         
-          
+            onCardDelete={handleCardDelete}
+            />              
+          </ProtectedRoute>
           <EditProfilePopup
             isOpen={isEditProfilePopupOpen}
             onClose={closeAllPopups}
@@ -227,8 +226,8 @@ function closeAllPopups() {
           <InfoTooltip
             isOpen={isInfoPopupOpen}
             onClose={closeAllPopups}
-            isSuccess={isInfoTooltipSuccess}
-          />        
+            isSuccess={isInfoTooltipSuccess ? true : false}
+          /> 
       </Switch>
       <Footer />
       </div>

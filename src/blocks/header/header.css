@@ -3,22 +3,23 @@
   flex-direction: row;
   flex: 1;
   justify-content: space-between;
-  max-width: 880px;  
-  margin: 45px auto 40px;
+  max-width: 880px; 
+  padding: 45px 0 40px; 
+  margin: 0 auto;
   border-bottom: 1px solid rgb(84, 84, 84, 0.7);
 }
 
 @media screen and (max-width: 1023px) {
   .header {
     max-width: 581px;
-    margin-top: 36px;
+    padding-top: 36px;
   }
 }
 
 @media screen and (max-width: 767px) {
   .header {
-    margin-top: 28px;
-    margin-bottom: 38.25px;
+    padding-top: 28px;
+    padding-bottom: 38.25px;
     max-width: 282px;
   }
 }

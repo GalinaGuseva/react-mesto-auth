@@ -1,18 +1,18 @@
-import React from '.react';
-import {Link} from 'react-router-dom';
-import EnterForm from "./EnterForm";
+import React from 'react';
+import EnterForm from './EnterForm';
 
-export default function Register({onSubmit}) {
+export default function Register({onEnterSubmit}) {
 
     return (
-        <div className="register">
+        <div className='register'>
             <EnterForm
-                name="register"
-                onSubmit={onSubmit}
-                title="Регистрация"
-                buttonTitle="Зарегистрироваться"
-            />
-            <p className="enter__text">Уже зарегистрированы? <Link to="/signin" className="enter__link">Войти</Link></p>
+                name='register'
+                onEnterSubmit={onEnterSubmit}
+                title='Регистрация'
+                buttonTitle='Зарегистрироваться'
+                regText='Уже зарегистрированы? '
+                regLink = 'Войти'
+            />            
         </div>
 
     );

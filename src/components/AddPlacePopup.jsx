@@ -1,6 +1,6 @@
-import React from "react";
-import PopupWithForm from "./PopupWithForm";
-import { useForm } from "../hooks/UseForm.";
+import React from 'react';
+import PopupWithForm from './PopupWithForm';
+import { useForm } from '../hooks/UseForm';
 
 export default function AddPlacePopup({ isOpen, onClose, onAddNewPlace }) {
   const initValues = { caption: "", link: "" };

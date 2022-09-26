@@ -1,53 +1,43 @@
-function getResponse(res) {
-  return res.ok
-    ? res.json()
-    : Promise.reject(new Error(`Ошибка ${res.status}`));
-}
-
 export const BASE_URL = "https://auth.nomoreparties.co";
 
-export const headers = {
-  "Content-Type": "application/json",
+const request = ({ url, method = "POST", token, data }) => {
+  return fetch(`${BASE_URL}${url}`, {
+    method: method,
+    headers: {
+      "Content-Type": "application/json",
+      ...(!!token && { Authorization: `Bearer ${token}` }),
+    },
+    ...(!!data && { body: JSON.stringify(data) }),
+  }).then((res) => {
+    res.ok ? res.json() : Promise.reject(new Error(`Ошибка ${res.status}`));
+  });
 };
 
 export function register({ email, password }) {
-  return fetch(`${BASE_URL}/signup`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      email,
-      password,
-    }),
-  }).then((res) => getResponse(res));
+  return request({
+    url: "/signup",
+    data: { email, password },
+  });
 }
 
 export function login({ email, password }) {
-  return fetch(`${BASE_URL}/signin`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      email,
-      password,
-    }),
-  }).then((res) => getResponse(res));
+  return request({
+    url: "/signin",
+    data: { email, password },
+  });
 }
 
-export function checkToken(token) {
-  return fetch(`${BASE_URL}/users/me`, {
+export function getContent(token) {
+  return request({
+    url: "/users/me",
     method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  }).then((res) => getResponse(res));
+    token,
+  });
 }
 
 export function signOut() {
-  return fetch(`${BASE_URL}/signout`, {
+  return request({
+    url: "/signout",
     method: "DELETE",
-  }).then((res) => getResponse(res));
+  });
 }

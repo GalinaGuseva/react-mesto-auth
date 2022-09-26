@@ -15,10 +15,10 @@ export default function Header({isLoggedIn, onSignOut, userEmail}) {
                 </>
                 }
                 <Route path="/signin">
-                    <Link to="signup" className="header__link">Регистрация</Link>
+                    <Link to="/signup" className="header__link">Регистрация</Link>
                 </Route>
                 <Route path="/signup">
-                    <Link to="signin" className="header__link">Войти</Link>
+                    <Link to="/signin" className="header__link">Войти</Link>
                   </Route>
             </div>      
     </header>
