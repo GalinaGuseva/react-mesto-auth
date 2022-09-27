@@ -9,7 +9,10 @@ const request = ({ url, method = "POST", token, data }) => {
     },
     ...(!!data && { body: JSON.stringify(data) }),
   }).then((res) => {
-    res.ok ? res.json() : Promise.reject(new Error(`Ошибка ${res.status}`));
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(new Error(`Ошибка ${res.status}`));
   });
 };
 
@@ -32,12 +35,5 @@ export function getContent(token) {
     url: "/users/me",
     method: "GET",
     token,
-  });
-}
-
-export function signOut() {
-  return request({
-    url: "/signout",
-    method: "DELETE",
   });
 }

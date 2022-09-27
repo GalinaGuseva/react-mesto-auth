@@ -35,20 +35,20 @@ function App() {
   });
   const [isInfoPopupOpen, setIsInfoPopupOpen] = React.useState(false);  
   const [isLoggedIn, setLoggedIn] = React.useState(false); 
-  const [userEmail, setUserEmail] = React.useState('');
-  const [isInfoTooltipSuccess, setIsInfoTooltipSuccess] = React.useState(false);
+  const [email, setEmail] = React.useState('');  
+  const [isSuccess, setIsSuccess] = React.useState(false);
   const history = useHistory();
-
-  const getData = () => {
+  
+  React.useEffect(() => {
     Promise.all([api.getUserInfo(), api.getInitialCards()])
       .then(([userData, initialCards]) => {
         setCurrentUser(userData);
         setCards(initialCards);
       })
       .catch((err) => console.log(err));
-  };
+  }, []);
 
-  // Проверка токена и авторизация пользователя
+
   React.useEffect(() => {
     const tockenCheck = () => {
       if(!localStorage.getItem('jwt')) return;
@@ -57,23 +57,19 @@ function App() {
       if(res) {
         setLoggedIn(true);
         history.push('/');
-        setUserEmail(res.data.email);
-        getData();
+        setEmail(res.data.email);                
       }
     })
   }
     tockenCheck();    
-  }, []);
-
- // Вход в аккаунт
-const handleLogin = ({email, password}) => {
-   return auth.login({email, password})
+  }, [history]);
+ 
+const handleLogin = (data) => {
+   return auth.login(data)
       .then((data) => {
-        if(!data.jwt) return;
-        localStorage.setItem('jwt', data.jwt);
-        setLoggedIn(true);
-        getData();
-        setUserEmail(email);        
+        if(!data.token) return;
+        localStorage.setItem('jwt', data.token);
+        setLoggedIn(true);                           
       })
        .catch((err) => {
           console.log(err); 
@@ -81,28 +77,24 @@ const handleLogin = ({email, password}) => {
       })
 }
 
-function handleRegister({email, password}) {
-    return auth.register({email, password})
-        .then(() => {
-          history.push('/signin');
-          setIsInfoTooltipSuccess(true);          
-        })
-        .catch((err) => {
-          console.log(err); 
-          setIsInfoTooltipSuccess(false);          
-        })
-        .finally(() => setIsInfoPopupOpen(true)); 
+const handleRegister = (data) => {
+  auth.register(data)
+    .then(res => {
+      if(res) {               
+        setIsSuccess(true);                
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      setIsSuccess(false);     
+    })
+    .finally(() => setIsInfoPopupOpen(true));
 }
 
 function handleSignOut() {
-    auth.signOut()
-        .then(() => {
-           setLoggedIn(false);
-           setUserEmail('');
-           localStorage.removeItem('jwt');
-           history.push('/signin');
-      })
-      .catch((err) => console.log(err));
+  localStorage.removeItem("jwt");
+  setLoggedIn(false);
+  history.push('/signin');     
 }  
 
 function handleAddPlaceSubmit(data) {
@@ -185,19 +177,17 @@ function closeAllPopups() {
        <div className="page"> 
        <Header onSignOut={handleSignOut}
           isLoggedIn={isLoggedIn}
-          userEmail={userEmail} />
+          email={email} />
        <Switch>
        <Route path="/signin">
-            {isLoggedIn ? <Redirect to="/"/> : <Login onEnterSubmit={handleLogin}/>}         
+            {isLoggedIn ? <Redirect to="/"/> : <Login onLogin={handleLogin}/>}         
         </Route>            
         <Route path="/signup"> 
-           {isLoggedIn ? <Redirect to="/"/> : <Register onEnterSubmit={handleRegister}/>}          
+           {isLoggedIn ? <Redirect to="/"/> : <Register onRegister={handleRegister}/>}          
         </Route>          
-        <Route>
-            {isLoggedIn ? <Redirect to="/" /> : <Redirect to="/signin" />}
-        </Route> 
-       <ProtectedRoute exact path="/" isLoggedIn={isLoggedIn}>  
-            <Main
+        <Route path="/" element = {
+          <ProtectedRoute exact path="/" isLoggedIn={isLoggedIn}>  
+           { <Main
             cards={cards}
             onEditProfile={handleEditProfileClick}
             onAddPlace={handleAddPlaceClick}
@@ -205,8 +195,12 @@ function closeAllPopups() {
             onCardClick={handleCardClick}
             onCardLike={handleCardLike}
             onCardDelete={handleCardDelete}
-            />              
+            /> 
+           }             
           </ProtectedRoute>
+        }>            
+        </Route> 
+        
           <EditProfilePopup
             isOpen={isEditProfilePopupOpen}
             onClose={closeAllPopups}
@@ -226,10 +220,10 @@ function closeAllPopups() {
           <InfoTooltip
             isOpen={isInfoPopupOpen}
             onClose={closeAllPopups}
-            isSuccess={isInfoTooltipSuccess ? true : false}
-          /> 
-      </Switch>
-      <Footer />
+            isSuccess={isSuccess}
+          />
+        </Switch>
+        <Footer />     
       </div>
     </CurrentUserContext.Provider>
   );
