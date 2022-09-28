@@ -2,19 +2,14 @@ import React from 'react';
 import PopupWithForm from './PopupWithForm';
 import { useForm } from '../hooks/UseForm';
 
-export default function AddPlacePopup({ isOpen, onClose, onAddNewPlace }) {
+export default function AddPlacePopup(props) {
   const initValues = { caption: "", link: "" };
-  const { values, setValues, handleChange } = useForm(initValues);
-
-  React.useEffect(() => {
-    if (isOpen) {
-      setValues({ caption: "", link: "" });
-    }
-  }, [isOpen]);
+  const { values, setValues, handleChange } = useForm(initValues);  
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onAddNewPlace({ name: values.caption, link: values.link });
+    props.onAddNewPlace({ name: values.caption, link: values.link });
+    setValues(initValues);
   };
 
   return (
@@ -22,8 +17,8 @@ export default function AddPlacePopup({ isOpen, onClose, onAddNewPlace }) {
       name="add"
       title="Новое место"
       buttonTitle="Создать"
-      isOpen={isOpen}
-      onClose={onClose}
+      isOpen={props.isOpen}
+      onClose={props.onClose}
       onSubmit={handleSubmit}
     >
       <input

@@ -2,24 +2,20 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import { useForm } from '../hooks/UseForm';
 
-export default function EnterForm({name, title, buttonTitle, regText, regLink, onSubmit}) {
+export default function EnterForm(props) {
 
     const initValues = { emailInput: "", passwordInput: "" };
     const { values, setValues, handleChange } = useForm(initValues);
     
     function handleSubmit(e) {
-        e.preventDefault();
-        //const { email, password } = values;        
-        onSubmit({email: values.emailInput, password: values.passwordInput})
-           .then(() => {
-            setValues(initValues);
-           })
-           .catch((err) => {console.log(`Ошибка ${err}`)})
+        e.preventDefault();              
+        props.onSubmit({email: values.emailInput, password: values.passwordInput})
+        setValues(initValues);
         }
     
     return (
-        <form onSubmit={handleSubmit} name={name} className="enter">
-            <h2 className="enter__title">{title}</h2>
+        <form onSubmit={handleSubmit} name={props.name} className="enter" noValidate>
+            <h2 className="enter__title">{props.title}</h2>
             <input
                 value={values.emailInput}
                 onChange={handleChange}
@@ -37,8 +33,8 @@ export default function EnterForm({name, title, buttonTitle, regText, regLink, o
                 placeholder="••••••••••"
                 required />         
             <button type="submit"
-                className="enter__submit-btn">{buttonTitle}</button>                
-        <p className="enter__text">{regText}<Link to='/signin' className='enter__link'>{regLink}</Link></p>              
+                className="enter__submit-btn">{props.buttonTitle}</button>                
+        <p className="enter__text">{props.regText}<Link to='/signin' className='enter__link'>{props.regLink}</Link></p>              
         </form>
       )
 }

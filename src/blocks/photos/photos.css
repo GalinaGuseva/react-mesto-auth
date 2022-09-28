@@ -1,5 +1,5 @@
 .photos {
-  max-width: 880px;
+  width: 100%;
   flex: 1;
   margin: 0 auto;
   padding-bottom: 66px;

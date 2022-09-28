@@ -1,6 +1,7 @@
 @import url(./vendor/normalize.css);
 @import url(./vendor/fonts/fonts.css);
 @import url(./blocks/page/page.css);
+@import url(./blocks/page/__center/page__center.css);
 @import url(./blocks/header/header.css);
 @import url(./blocks/header/__logo/header__logo.css);
 @import url(./blocks/header/__email/header__email.css);
@@ -55,6 +56,7 @@
 @import url(./blocks/avatar-popup/avatar-popup.css);
 @import url(./blocks/confirm-popup/confirm-popup.css);
 @import url(./blocks/edit-popup/edit-popup.css);
+@import url(./blocks/info-popup/info-popup.css);
 @import url(./blocks/add-popup/add-popup.css);
 @import url(./blocks/photo-popup/photo-popup.css);
 @import url(./blocks/photo-popup/__container/photo-popup__container.css);

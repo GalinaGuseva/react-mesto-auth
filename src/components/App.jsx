@@ -69,8 +69,8 @@ const handleLogin = (data) => {
       .then((data) => {
         if(!data.token) return;
         localStorage.setItem('jwt', data.token);
-        setLoggedIn(true);                           
-      })
+        setLoggedIn(true);            
+     })
        .catch((err) => {
           console.log(err); 
           setLoggedIn(false); 
@@ -81,7 +81,7 @@ const handleRegister = (data) => {
   auth.register(data)
     .then(res => {
       if(res) {               
-        setIsSuccess(true);                
+        setIsSuccess(true);                               
       }
     })
     .catch(err => {
@@ -174,7 +174,6 @@ function closeAllPopups() {
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-       <div className="page"> 
        <Header onSignOut={handleSignOut}
           isLoggedIn={isLoggedIn}
           email={email} />
@@ -223,8 +222,7 @@ function closeAllPopups() {
             isSuccess={isSuccess}
           />
         </Switch>
-        <Footer />     
-      </div>
+        <Footer />        
     </CurrentUserContext.Provider>
   );
 }
