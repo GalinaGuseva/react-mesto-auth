@@ -1,29 +1,28 @@
 import React from "react";
 import logo from "../images/logo.svg";
-import { Switch, Route, Link } from "react-router-dom";
+import { Routes, Route, Link } from "react-router-dom";
 
 export default function Header({isLoggedIn, onSignOut, email}) {
    return (
     <header className="header">   
       <img src={logo} alt="лого" className="header__logo" />
       <div className="header__menu">
-      <Switch>
-      {isLoggedIn &&
-                <>
-        <p className="header__email">{email} <Link to='/signin' className="header__link" onClick={onSignOut}>Выйти</Link></p>         
-        </>
-                }
-      <Route exact path="/signin">
+      <Routes>
+      <Route exact path="/" element = {                  
+        isLoggedIn && <p className="header__email">{email} <Link to='/signin' className="header__link" onClick={onSignOut}>Выйти</Link></p>         
+      }
+      />
+      <Route path="/signin" element = {
           <Link to="/signup" className="header__link">
             Регистрация
-          </Link>
-      </Route>
-      <Route exact path="/signup">
+          </Link>}
+       />
+      <Route path="/signup" element = {
           <Link to="/signin" className="header__link">
             Войти
-          </Link>
-      </Route>        
-      </Switch>
+          </Link>}
+       />        
+      </Routes>
       </div>
       </header>    
   );

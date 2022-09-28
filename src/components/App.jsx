@@ -1,6 +1,6 @@
 import React from 'react';
 import api from '../utils/Api.js';
-import {Switch, Route, Redirect, useHistory } from 'react-router-dom';
+import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import '../index.css';
 import Header from './Header';
@@ -38,7 +38,7 @@ function App() {
   const [email, setEmail] = React.useState(''); 
   const [isLoaded, setIsLoaded] = React.useState(false);
   const [isSuccess, setIsSuccess] = React.useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     const tockenCheck = () => {
@@ -47,24 +47,25 @@ function App() {
     auth.getContent(jwt).then((res) => {
       if(res) {
         setLoggedIn(true);
-        history.push('/');
+        navigate('/');
         setEmail(res.data.email);                
       }
     })
   }
     tockenCheck();    
-  }, [history]);
+  }, []);
  
 const handleLogin = (data) => {
    return auth.login(data)
       .then((data) => {
         if(!data.token) return;
         localStorage.setItem('jwt', data.token);
-        setLoggedIn(true);            
+        setLoggedIn(true);                
      })
        .catch((err) => {
           console.log(err); 
           setLoggedIn(false); 
+          setIsInfoPopupOpen(true);
       })
 }
 
@@ -72,7 +73,8 @@ const handleRegister = (data) => {
   auth.register(data)
     .then(res => {
       if(res) {               
-        setIsSuccess(true);                               
+        setIsSuccess(true); 
+        setEmail(data.email);                             
       }
     })
     .catch(err => {
@@ -85,7 +87,7 @@ const handleRegister = (data) => {
 function handleSignOut() {
   localStorage.removeItem("jwt");
   setLoggedIn(false);
-  history.push('/signin');     
+  navigate('/signin');     
 }  
 
 React.useEffect(() => {
@@ -97,13 +99,13 @@ React.useEffect(() => {
     })
     .catch((err) => {      
       console.log(err);
-      history.push('/signin')       
+      navigate('/signin')       
     })
     .finally(() => {
       setTimeout(showContent, 2000)
     })
 }
-}, [isLoggedIn, history])
+}, [isLoggedIn])
 
 const showContent = () => {
 setIsLoaded(true)
@@ -176,28 +178,55 @@ function handleCardClick(card) {
     setSelectedCard(card);
   }
 
-function closeAllPopups() {
+  function handlePopupCloseByOverlay(e) {
+    if (e.target.classList.contains("popup")) {
+      closeAllPopups();
+    }
+  }
+
+  function handleEsc(e) {
+    if (e.key === "Escape") {
+      closeAllPopups();
+    }
+  }
+
+  React.useEffect(() => {
+    if (
+      isEditAvatarPopupOpen ||
+      isEditProfilePopupOpen ||
+      isAddPlacePopupOpen ||
+      selectedCard ||
+      isInfoPopupOpen
+    ) {
+      document.addEventListener("keydown", handleEsc);
+      document.addEventListener("click", handlePopupCloseByOverlay);
+    }
+  });
+
+  function closeAllPopups() {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsInfoPopupOpen(false);
     setSelectedCard({ name: "", link: "" });
+    document.removeEventListener("keydown", handleEsc);
+    document.removeEventListener("click", handlePopupCloseByOverlay);
   }
 
   return (
-    <CurrentUserContext.Provider value={currentUser}>
+   <CurrentUserContext.Provider value={currentUser}>
        <Header onSignOut={handleSignOut}
           isLoggedIn={isLoggedIn}
-          email={email} />                    
-       <Switch>
-       <Route path="/signin">
-            {isLoggedIn ? <Redirect to="/"/> : <Login onLogin={handleLogin}/>}         
-        </Route>            
-        <Route path="/signup"> 
-           {isLoggedIn ? <Redirect to="/"/> : <Register onRegister={handleRegister}/>}          
-        </Route>          
-        <Route exact path="/" element = {
-          <ProtectedRoute exact path="/" isLoggedIn={isLoggedIn}>  
+          email={email} />            
+    <Routes>
+       <Route path="/signin" 
+       element = {isLoggedIn ? <Navigate to="/" /> : <Login onLogin={handleLogin}/>}
+        />            
+      <Route path="/signup"
+        element = {isLoggedIn ? <Navigate to="/" /> : <Register onRegister={handleRegister}/>}          
+        />          
+      <Route exact path="/" element = {
+          <ProtectedRoute path="/" isLoggedIn={isLoggedIn}>  
            <Main
             cards={cards}
             onEditProfile={handleEditProfileClick}
@@ -209,8 +238,8 @@ function closeAllPopups() {
             isLoaded={ isLoaded }
             />              
           </ProtectedRoute>
-        }>            
-        </Route>         
+        }/>            
+     </Routes>        
           <EditProfilePopup
             isOpen={isEditProfilePopupOpen}
             onClose={closeAllPopups}
@@ -231,9 +260,8 @@ function closeAllPopups() {
             isOpen={ isInfoPopupOpen }
             onClose={closeAllPopups}
             isSuccess={isSuccess}
-          />
-        </Switch>
-        <Footer />        
+          />        
+      <Footer />        
     </CurrentUserContext.Provider>
   );
 }
