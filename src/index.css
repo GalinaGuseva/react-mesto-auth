@@ -51,8 +51,6 @@
 @import url(./blocks/popup/__title/popup__title.css);
 @import url(./blocks/popup/__title/_info/popup__title_info.css);
 @import url(./blocks/popup/__image/popup__image.css);
-@import url(./blocks/popup/__error-message/popup__error-message.css);
-@import url(./blocks/popup/__error-message/_visible/popup__error-message_visible.css);
 @import url(./blocks/avatar-popup/avatar-popup.css);
 @import url(./blocks/confirm-popup/confirm-popup.css);
 @import url(./blocks/edit-popup/edit-popup.css);

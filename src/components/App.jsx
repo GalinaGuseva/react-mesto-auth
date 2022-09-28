@@ -35,19 +35,10 @@ function App() {
   });
   const [isInfoPopupOpen, setIsInfoPopupOpen] = React.useState(false);  
   const [isLoggedIn, setLoggedIn] = React.useState(false); 
-  const [email, setEmail] = React.useState('');  
+  const [email, setEmail] = React.useState(''); 
+  const [isLoaded, setIsLoaded] = React.useState(false);
   const [isSuccess, setIsSuccess] = React.useState(false);
   const history = useHistory();
-  
-  React.useEffect(() => {
-    Promise.all([api.getUserInfo(), api.getInitialCards()])
-      .then(([userData, initialCards]) => {
-        setCurrentUser(userData);
-        setCards(initialCards);
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
 
   React.useEffect(() => {
     const tockenCheck = () => {
@@ -77,7 +68,7 @@ const handleLogin = (data) => {
       })
 }
 
-const handleRegister = (data) => {
+const handleRegister = (data) => {  
   auth.register(data)
     .then(res => {
       if(res) {               
@@ -96,6 +87,27 @@ function handleSignOut() {
   setLoggedIn(false);
   history.push('/signin');     
 }  
+
+React.useEffect(() => {
+  if (localStorage.getItem('jwt')) {
+  Promise.all([api.getUserInfo(), api.getInitialCards()])
+    .then(([userData, initialCards]) => {
+      setCurrentUser(userData);
+      setCards(initialCards);      
+    })
+    .catch((err) => {      
+      console.log(err);
+      history.push('/signin')       
+    })
+    .finally(() => {
+      setTimeout(showContent, 2000)
+    })
+}
+}, [isLoggedIn, history])
+
+const showContent = () => {
+setIsLoaded(true)
+}    
 
 function handleAddPlaceSubmit(data) {
     api
@@ -176,7 +188,7 @@ function closeAllPopups() {
     <CurrentUserContext.Provider value={currentUser}>
        <Header onSignOut={handleSignOut}
           isLoggedIn={isLoggedIn}
-          email={email} />
+          email={email} />                    
        <Switch>
        <Route path="/signin">
             {isLoggedIn ? <Redirect to="/"/> : <Login onLogin={handleLogin}/>}         
@@ -184,9 +196,9 @@ function closeAllPopups() {
         <Route path="/signup"> 
            {isLoggedIn ? <Redirect to="/"/> : <Register onRegister={handleRegister}/>}          
         </Route>          
-        <Route path="/" element = {
+        <Route exact path="/" element = {
           <ProtectedRoute exact path="/" isLoggedIn={isLoggedIn}>  
-           { <Main
+           <Main
             cards={cards}
             onEditProfile={handleEditProfileClick}
             onAddPlace={handleAddPlaceClick}
@@ -194,12 +206,11 @@ function closeAllPopups() {
             onCardClick={handleCardClick}
             onCardLike={handleCardLike}
             onCardDelete={handleCardDelete}
-            /> 
-           }             
+            isLoaded={ isLoaded }
+            />              
           </ProtectedRoute>
         }>            
-        </Route> 
-        
+        </Route>         
           <EditProfilePopup
             isOpen={isEditProfilePopupOpen}
             onClose={closeAllPopups}
@@ -217,7 +228,7 @@ function closeAllPopups() {
           />
           <ImagePopup card={selectedCard} onClose={closeAllPopups} /> 
           <InfoTooltip
-            isOpen={isInfoPopupOpen}
+            isOpen={ isInfoPopupOpen }
             onClose={closeAllPopups}
             isSuccess={isSuccess}
           />
