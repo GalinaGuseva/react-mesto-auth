@@ -1,15 +1,20 @@
-import React from 'react';
-import PopupWithForm from './PopupWithForm';
-import { useForm } from '../hooks/UseForm';
+import React from "react";
+import PopupWithForm from "./PopupWithForm";
+import { useForm } from "../hooks/UseForm";
 
 export default function AddPlacePopup(props) {
   const initValues = { caption: "", link: "" };
-  const { values, setValues, handleChange } = useForm(initValues);  
+  const { values, setValues, handleChange } = useForm(initValues);
+
+  React.useEffect(() => {
+    if (props.isOpen) {
+      setValues({ name: "", link: "" });
+    }
+  }, [props.isOpen]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     props.onAddNewPlace({ name: values.caption, link: values.link });
-    setValues(initValues);
   };
 
   return (

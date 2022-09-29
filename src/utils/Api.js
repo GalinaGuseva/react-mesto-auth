@@ -1,5 +1,3 @@
-import { apiOptions } from "./constants";
-
 class Api {
   constructor(options) {
     this._url = options.url;
@@ -71,6 +69,13 @@ class Api {
     }).then((res) => this._getResponse(res));
   }
 }
+const apiOptions = {
+  url: "https://mesto.nomoreparties.co/v1/cohort-47",
+  headers: {
+    authorization: "3b67ac11-b29e-4182-9110-a6f8ab5d8b17",
+    "Content-Type": "application/json",
+  },
+};
 
 const api = new Api(apiOptions);
 

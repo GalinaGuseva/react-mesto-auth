@@ -1,14 +1,18 @@
 import React from "react";
 
 export default function PopupWithForm(props) {
-  return (
+  return props.isOpen ? (
     <div
       className={`popup ${props.name}-popup ${props.isOpen && "popup_opened"}`}
+      onClick={props.onClose}
     >
       <form
         name={`${props.name}`}
         className="popup__container"
         onSubmit={props.onSubmit}
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
       >
         <button
           type="button"
@@ -25,5 +29,5 @@ export default function PopupWithForm(props) {
         >{`${props.buttonTitle}`}</button>
       </form>
     </div>
-  );
+  ) : null;
 }
