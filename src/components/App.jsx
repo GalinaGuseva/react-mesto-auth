@@ -44,14 +44,14 @@ function App() {
       const jwt = localStorage.getItem("jwt");
       auth.getContent(jwt).then((res) => {
         if (res) {
-          setLoggedIn(true);
           setEmail(res.data.email);
+          setLoggedIn(true);
           navigate("/");
         }
       });
     };
     tockenCheck();
-  }, []);
+  }, [navigate]); //Оказывается, здесь надо было зависимость указать, чтобы useEffect срабатывал при каждом переходе на страницу
 
   const handleLogin = (data) => {
     return auth
@@ -59,7 +59,7 @@ function App() {
       .then((data) => {
         if (!data.token) return;
         localStorage.setItem("jwt", data.token);
-        setLoggedIn(true);
+        setLoggedIn(true); //А здесь в ответе email не приходит - только токен
       })
       .catch((err) => {
         console.log(err);
@@ -94,7 +94,7 @@ function App() {
   }
 
   React.useEffect(() => {
-    if (localStorage.getItem("jwt")) {
+    if (localStorage.getItem("jwt") && email) {
       Promise.all([api.getUserInfo(), api.getInitialCards()])
         .then(([userData, initialCards]) => {
           setCurrentUser(userData);
