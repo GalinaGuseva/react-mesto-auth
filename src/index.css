@@ -3,10 +3,16 @@
 @import url(./blocks/page/page.css);
 @import url(./blocks/page/__center/page__center.css);
 @import url(./blocks/header/header.css);
+@import url(./blocks/header/__mobile/header__mobile.css);
 @import url(./blocks/header/__logo/header__logo.css);
 @import url(./blocks/header/__email/header__email.css);
 @import url(./blocks/header/__link/header__link.css);
+@import url(./blocks/header/__link/_menu/header__link_menu.css);
 @import url(./blocks/header/__menu/header__menu.css);
+@import url(./blocks/header/__menu/_inactive/header__menu_inactive.css);
+@import url(./blocks/header-burger/header-burger.css);
+@import url(./blocks/header-burger/__line/header-burger__line.css);
+@import url(./blocks/header-burger/__line/_active/header-burger__line_active.css);
 @import url(./blocks/enter/enter.css);
 @import url(./blocks/enter/__input/enter__input.css);
 @import url(./blocks/enter/__link/enter__link.css);
