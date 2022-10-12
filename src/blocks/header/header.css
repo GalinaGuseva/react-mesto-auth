@@ -10,7 +10,13 @@
   border-bottom: 1px solid rgb(84, 84, 84, 0.7);
 }
 
-@media screen and (max-width: 633px) {
+@media screen and (max-width: 767px) {
+  .header {
+    padding-bottom: 40px;
+  }
+}
+
+@media screen and (max-width: 567px) {
   .header {
     padding-bottom: 30px;
   }
