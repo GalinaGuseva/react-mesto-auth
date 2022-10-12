@@ -51,7 +51,7 @@ function App() {
       });
     };
     tockenCheck();
-  }, [navigate]); //Оказывается, здесь надо было зависимость указать, чтобы useEffect срабатывал при каждом переходе на страницу
+  }, [navigate]);
 
   const handleLogin = (data) => {
     return auth
@@ -59,7 +59,7 @@ function App() {
       .then((data) => {
         if (!data.token) return;
         localStorage.setItem("jwt", data.token);
-        setLoggedIn(true); //А здесь в ответе email не приходит - только токен
+        setLoggedIn(true);
       })
       .catch((err) => {
         console.log(err);
