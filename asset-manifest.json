@@ -1,14 +1,14 @@
 {
   "main.css": "/react-mesto-auth/static/css/main.49ac519d.chunk.css",
-  "main.js": "/react-mesto-auth/static/js/main.4d48d733.chunk.js",
-  "main.js.map": "/react-mesto-auth/static/js/main.4d48d733.chunk.js.map",
+  "main.js": "/react-mesto-auth/static/js/main.c65d6f03.chunk.js",
+  "main.js.map": "/react-mesto-auth/static/js/main.c65d6f03.chunk.js.map",
   "static/js/1.90ecf6b5.chunk.js": "/react-mesto-auth/static/js/1.90ecf6b5.chunk.js",
   "static/js/1.90ecf6b5.chunk.js.map": "/react-mesto-auth/static/js/1.90ecf6b5.chunk.js.map",
-  "static/js/2.f6e26223.chunk.js": "/react-mesto-auth/static/js/2.f6e26223.chunk.js",
-  "static/js/2.f6e26223.chunk.js.map": "/react-mesto-auth/static/js/2.f6e26223.chunk.js.map",
+  "static/js/2.129025e3.chunk.js": "/react-mesto-auth/static/js/2.129025e3.chunk.js",
+  "static/js/2.129025e3.chunk.js.map": "/react-mesto-auth/static/js/2.129025e3.chunk.js.map",
   "runtime~main.js": "/react-mesto-auth/static/js/runtime~main.4d3b2acd.js",
   "runtime~main.js.map": "/react-mesto-auth/static/js/runtime~main.4d3b2acd.js.map",
-  "static/media/index.css": "/react-mesto-auth/static/media/like.cb5f1643.svg",
+  "static/media/index.css": "/react-mesto-auth/static/media/Inter-Regular.3ac83020.woff",
   "static/media/logo.svg": "/react-mesto-auth/static/media/logo.51772f7c.svg",
   "static/media/trash-top.svg": "/react-mesto-auth/static/media/trash-top.8ceae468.svg",
   "static/media/trash-bottom.svg": "/react-mesto-auth/static/media/trash-bottom.ba2b26b8.svg",
@@ -16,6 +16,6 @@
   "static/media/fail.svg": "/react-mesto-auth/static/media/fail.c32299fa.svg",
   "static/css/main.49ac519d.chunk.css.map": "/react-mesto-auth/static/css/main.49ac519d.chunk.css.map",
   "index.html": "/react-mesto-auth/index.html",
-  "precache-manifest.dda27f7f471d1a940c0b72a4e3138c7a.js": "/react-mesto-auth/precache-manifest.dda27f7f471d1a940c0b72a4e3138c7a.js",
+  "precache-manifest.9de0bfc70e60f4f3a8a83e118de47205.js": "/react-mesto-auth/precache-manifest.9de0bfc70e60f4f3a8a83e118de47205.js",
   "service-worker.js": "/react-mesto-auth/service-worker.js"
 }
